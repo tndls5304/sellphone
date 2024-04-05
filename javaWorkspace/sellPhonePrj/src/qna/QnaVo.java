@@ -1,4 +1,4 @@
-package QNA;
+package qna;
 
 public class QnaVo {
 

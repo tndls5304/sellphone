@@ -6,8 +6,6 @@ import java.sql.ResultSet;
 import java.util.ArrayList;
 
 import main.Main;
-import member.MemberVo;
-import oracle.jdbc.proxy.annotation.Pre;
 import util.JDBCTemplate;
 
 public class Free_board {

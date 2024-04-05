@@ -5,9 +5,9 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.util.ArrayList;
 
-import main.MainController;
+import main.Main;
 import member.MemberController;
-import util.Util;
+import util.JDBCTemplate;
 
 public class PurchaseListController {
 
@@ -30,16 +30,16 @@ public class PurchaseListController {
 		System.out.println("기종을 선택해주세요.");
 		System.out.println("1. 아이폰");
 		System.out.println("2. 갤럭시");
-		String inputNum1 = MainController.SC.nextLine();
+		String inputNum1 = Main.SC.nextLine();
 		// 값 입력받기
 		if (inputNum1.equals("1")) {
 			System.out.println("1. 기본 모델");
 			System.out.println("2. 프로 모델");
 			System.out.println("3. Xs");
-			String inputNum2 = MainController.SC.nextLine();
+			String inputNum2 = Main.SC.nextLine();
 			if (inputNum2.equals("1")) {
 				System.out.println("모델의 넘버를 입력해주세요.");
-				String inputNumber1 = MainController.SC.nextLine();
+				String inputNumber1 = Main.SC.nextLine();
 				if (Integer.parseInt(inputNumber1) > 15 || Integer.parseInt(inputNumber1) < 11) {
 					System.out.println("존재하지 않는 기종입니다. 처음부터 다시 진행해주세요.");
 					return;
@@ -48,7 +48,7 @@ public class PurchaseListController {
 				inputPhoneName += inputNumber1;
 			} else if (inputNum2.equals("2")) {
 				System.out.println("모델의 넘버를 입력해주세요.");
-				String inputNumber2 = MainController.SC.nextLine();
+				String inputNumber2 = Main.SC.nextLine();
 				if (Integer.parseInt(inputNumber2) > 15 || Integer.parseInt(inputNumber2) < 11) {
 					System.out.println("존재하지 않는 기종입니다. 처음부터 다시 진행해주세요.");
 					return;
@@ -60,7 +60,7 @@ public class PurchaseListController {
 			}
 		} else if (inputNum1.equals("2")) {
 			System.out.println("시리즈의 넘버를 입력해주세요.");
-			String inputNumber3 = MainController.SC.nextLine();
+			String inputNumber3 = Main.SC.nextLine();
 			if (Integer.parseInt(inputNumber3) > 24 || Integer.parseInt(inputNumber3) < 21) {
 				System.out.println("존재하지 않는 기능입니다. 처음부터 다시 진행해주세요.");
 				return;
@@ -70,9 +70,9 @@ public class PurchaseListController {
 		}
 
 		System.out.println("배터리의 성능 수치를 입력해주세요.");
-		String inputBatteryNum = MainController.SC.nextLine();
+		String inputBatteryNum = Main.SC.nextLine();
 		System.out.println("핸드폰 액정의 스크래치 개수를 입력해주세요.");
-		String inputScratchNum = MainController.SC.nextLine();
+		String inputScratchNum = Main.SC.nextLine();
 
 		// 등급 측정하기
 		System.out.println("등급 측정 중...");
@@ -111,7 +111,7 @@ public class PurchaseListController {
 			return;
 		}
 		// 커넥션 가져오기
-		Connection conn = Util.getConn();
+		Connection conn = JDBCTemplate.getConn();
 		// SQL1
 		String sql1 = "SELECT NO, GRADE_PRICE FROM PHONE WHERE GRADE = ? AND MODEL_NAME = ?";
 		PreparedStatement pstmt1 = conn.prepareStatement(sql1);
@@ -129,13 +129,13 @@ public class PurchaseListController {
 		System.out.println("진행하시겠습니까?");
 		System.out.println("1. 예");
 		System.out.println("2. 아니오");
-		String str = MainController.SC.nextLine();
+		String str = Main.SC.nextLine();
 		if (str.equals("1")) {
 			// SQL2
 			String sql = "INSERT INTO PURCHASE_LIST(NO, PHONE_NUMBER, MEMBER_ID, BATTERY_NUM, SCRATCH_NUM, TOTAL_SCORE) VALUES(SEQ_PURCHASE_LIST_NO.NEXTVAL, ?, ?, ?, ?, ?)";
 			PreparedStatement pstmt = conn.prepareStatement(sql);
 			pstmt.setString(1, phoneNumber);
-			pstmt.setString(2, MemberController.mvo.getId());
+			pstmt.setString(2, Main.loginMember.getId());
 			pstmt.setString(3, inputBatteryNum);
 			pstmt.setString(4, inputScratchNum);
 			pstmt.setInt(5, score);
@@ -160,11 +160,11 @@ public class PurchaseListController {
 
 	public void sellInfo() throws Exception {
 		// 커넥션 가져오기
-		Connection conn = Util.getConn();
+		Connection conn = JDBCTemplate.getConn();
 		// SQL
 		String sql = "SELECT L.NO , L.PHONE_NUMBER , L.MEMBER_ID , L.SCRATCH_NUM , L.BATTERY_NUM , L.TOTAL_SCORE , TO_CHAR(L.ENROLL_DATE, 'YYYY.MM.DD HH:MI') ENROLL_DATE , P.MODEL_NAME , P.GRADE , P.GRADE_PRICE FROM PURCHASE_LIST L JOIN PHONE P ON P.NO = L.PHONE_NUMBER WHERE MEMBER_ID = ?";
 		PreparedStatement pstmt = conn.prepareCall(sql);
-		pstmt.setString(1, MemberController.mvo.getId());
+		pstmt.setString(1, Main.loginMember.getId());
 		ResultSet rs = pstmt.executeQuery();
 		// 갑 불러오기
 		PurchaseListVo vo = null;
@@ -235,7 +235,7 @@ public class PurchaseListController {
 		System.out.println("1. 매입 내역 전체 조회");
 		System.out.println("2. 매입 내역 상세 조회(ID)");
 		System.out.println("3. 종료");
-		String inputNum = MainController.SC.nextLine();
+		String inputNum = Main.SC.nextLine();
 		switch (inputNum) {
 		case "1":
 			masterInfo();
@@ -245,7 +245,7 @@ public class PurchaseListController {
 			break;
 		case "3":
 			System.out.println("종료..");
-			return MainController.run = false;
+			return Main.run = false;
 		default:
 			System.out.println("잘못된 입력입니다.");
 			break;
@@ -255,7 +255,7 @@ public class PurchaseListController {
 
 	private void masterInfo() throws Exception {
 		// 커넥션 가져오기
-		Connection conn = Util.getConn();
+		Connection conn = JDBCTemplate.getConn();
 		// SQL
 		String sql = "SELECT L.NO , L.PHONE_NUMBER , L.MEMBER_ID , L.SCRATCH_NUM , L.BATTERY_NUM , L.TOTAL_SCORE , TO_CHAR(L.ENROLL_DATE, 'YYYY.MM.DD HH:MI') ENROLL_DATE , P.MODEL_NAME , P.GRADE , P.GRADE_PRICE FROM PURCHASE_LIST L JOIN PHONE P ON P.NO = L.PHONE_NUMBER";
 		PreparedStatement pstmt = conn.prepareCall(sql);
@@ -327,10 +327,10 @@ public class PurchaseListController {
 	private void masterDetailInfo() throws Exception {
 		System.out.println("조회하고 싶은 유저의 아이디를 입력하세요.");
 		System.out.println("유저ID : ");
-		String input1 = MainController.SC.nextLine();
+		String input1 = Main.SC.nextLine();
 
 		ArrayList<PurchaseListVo> list = new ArrayList<PurchaseListVo>();
-		Connection conn = Util.getConn();
+		Connection conn = JDBCTemplate.getConn();
 		String sql = "SELECT L.NO , L.PHONE_NUMBER , L.MEMBER_ID , L.SCRATCH_NUM , L.BATTERY_NUM , L.TOTAL_SCORE , TO_CHAR(L.ENROLL_DATE, 'YYYY.MM.DD HH:MI') ENROLL_DATE , P.MODEL_NAME , P.GRADE , P.GRADE_PRICE FROM PURCHASE_LIST L JOIN PHONE P ON P.NO = L.PHONE_NUMBER WHERE L.MEMBER_ID = ?";
 		PreparedStatement pstmt = conn.prepareCall(sql);
 		pstmt.setString(1, input1);

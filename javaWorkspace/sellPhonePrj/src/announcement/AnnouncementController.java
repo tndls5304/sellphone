@@ -1,19 +1,14 @@
 package announcement;
 
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.util.ArrayList;
+
+import main.Main;
+import util.JDBCTemplate;
+
 public class AnnouncementController {
-	package announcement;
-
-	import java.sql.Connection;
-
-	import java.sql.PreparedStatement;
-	import java.sql.ResultSet;
-	import java.sql.SQLException;
-	import java.util.ArrayList;
-
-	import main.Main;
-	import util.Util;
-
-	
 
 	   public void printMenu() throws Exception{
 	      System.out.println("번호를 입력해주세요");
@@ -47,7 +42,7 @@ public class AnnouncementController {
 	         System.out.println("관리자님 환영합니다.");
 	         
 	         //conn
-	         Connection conn = Util.getConn();
+	         Connection conn = JDBCTemplate.getConn();
 	         
 	         System.out.println("제목 : ");
 	         String intputtitle = Main.SC.nextLine();
@@ -110,7 +105,7 @@ public class AnnouncementController {
 	   private void editBoardTitle() throws Exception {
 	      System.out.println("제목 변경 - 번호입력");
 	      
-	      Connection conn = Util.getConn();
+	      Connection conn = JDBCTemplate.getConn();
 	      
 	      String sql ="UPDATE ANNOUNCEMENT SET TITLE = ? WHERE NO = ?";
 	      
@@ -137,7 +132,7 @@ public class AnnouncementController {
 	   private void editBoardContent() throws Exception {
 	      System.out.println("내용 변경 - 번호입력");
 	      
-	      Connection conn = Util.getConn();
+	      Connection conn = JDBCTemplate.getConn();
 	      
 	      String sql ="UPDATE ANNOUNCEMENT SET CONTENT = ? WHERE NO = ?";
 	      
@@ -163,7 +158,7 @@ public class AnnouncementController {
 	   private void editBoard() throws Exception {
 	      System.out.println("제목 및 내용 변경 - 번호입력");
 	      
-	      Connection conn = Util.getConn();
+	      Connection conn = JDBCTemplate.getConn();
 	      
 	      String sql ="UPDATE ANNOUNCEMENT SET TITLE = ? , CONTENT = ? , MODIFY_DATE = SYSDATE WHERE NO = ?";
 	      
@@ -192,7 +187,7 @@ public class AnnouncementController {
 	   private void selecBoardList() throws Exception {
 	      
 	      //conn
-	      Connection conn = Util.getConn();
+	      Connection conn = JDBCTemplate.getConn();
 	      String sql = "SELECT * FROM ANNOUNCEMENT WHERE DEL_YN = 'N' ORDER BY NO DESC";
 	      
 	      PreparedStatement pstmt = conn.prepareStatement(sql);
@@ -260,7 +255,7 @@ public class AnnouncementController {
 	   //게시글 상세조회(번호)
 	   private void selectBoardNo() throws Exception{
 	      //conn
-	   Connection conn = Util.getConn();
+	   Connection conn = JDBCTemplate.getConn();
 	   
 	   System.out.println("검색할 번호 : ");
 	   String inputNo = Main.SC.nextLine();
@@ -311,7 +306,7 @@ public class AnnouncementController {
 	}
 	   //게시글 상세조회(카테고리)
 	   private void selectBoardCategory() throws Exception {
-	      Connection conn = Util.getConn();
+	      Connection conn = JDBCTemplate.getConn();
 	      
 	      System.out.println("검색할 카테고리 : ");
 	      String inputCategory = Main.SC.nextLine();
@@ -361,7 +356,7 @@ public class AnnouncementController {
 	   
 	   //게시글 상세조회(제목)
 	   private void selectBoardTitle() throws Exception {
-	   Connection conn = Util.getConn();
+	   Connection conn = JDBCTemplate.getConn();
 	      
 	      System.out.println("검색할 제목 : ");
 	      String inputTitle = Main.SC.nextLine();
@@ -411,7 +406,7 @@ public class AnnouncementController {
 	   }
 	   //게시글 상세조회(내용)
 	   private void selectBoardContent() throws Exception {
-	      Connection conn = Util.getConn();
+	      Connection conn = JDBCTemplate.getConn();
 	      
 	      System.out.println("검색할 내용 : ");
 	      String inputTitle = Main.SC.nextLine();
@@ -466,7 +461,7 @@ public class AnnouncementController {
 	         System.out.println("게시글삭제");
 	         
 	         //conn준비
-	         Connection conn = Util.getConn();
+	         Connection conn = JDBCTemplate.getConn();
 	         
 	         //sql준비
 	         String sql = "UPDATE ANNOUNCEMENT SET DEL_YN = 'Y' , MODIFY_DATE = SYSDATE WHERE NO = ?";

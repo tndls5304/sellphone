@@ -206,7 +206,7 @@ public class FaqController {
    }
    // 관리자-게시글 작성  
    public void write() throws Exception {
-      String id=Main.loginmember.getId();
+      String id=Main.loginMember.getId();
       if(id.equals("ADMIN")) {
         
          // conn준비
@@ -249,7 +249,7 @@ public class FaqController {
    
    //관리자-게시글 수정
    public void edit() throws Exception {
-      String id=Main.loginmember.getId();
+      String id=Main.loginMember.getId();
          if(id.equals("ADMIN")) {
             
             // conn준비
@@ -291,7 +291,7 @@ public class FaqController {
    //관리자-게시글 삭제
    
    public void delete() throws Exception {
-      String id=Main.loginmember.getId();
+      String id = Main.loginMember.getId();
          if(id.equals("ADMIN")) {
             
             Connection conn = JDBCTemplate.getConn();
