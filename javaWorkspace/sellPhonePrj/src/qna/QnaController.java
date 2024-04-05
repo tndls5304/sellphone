@@ -1,4 +1,4 @@
-package QNA;
+package qna;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
@@ -6,8 +6,8 @@ import java.sql.ResultSet;
 import java.util.ArrayList;
 import java.util.List;
 
-import db.JDBCTemplate;
 import main.Main;
+import util.JDBCTemplate;
 
 public class QnaController {
 
@@ -53,14 +53,14 @@ public class QnaController {
 	private void userWrite() throws Exception {
 
 		// 로그인 해야만
-		if (Main.LoginMember == null) {
+		if (Main.loginMember == null) {
 			System.out.println("로그인 해야만");
 			return;
 		}
 
-		if (Main.LoginMember.getId().equals("admin")) {
+		if (Main.loginMember.getId().equals("admin")) {
 			System.out.println("관리자 전용");
-			Connection conn = db.JDBCTemplate.getConn();
+			Connection conn = JDBCTemplate.getConn();
 
 			// sql 준비
 			String sql = "INSERT INTO QNA(NO, MASTER_TITLE, MASTER_CONTENTS,CATEGORY) VALUES(SEQ_QNA_NO.NEXTVAL , ?,? , ?)";
@@ -87,7 +87,7 @@ public class QnaController {
 			System.out.println("문의 작성 성공 !");
 		} else {
 			System.out.println("유저 전용");
-			Connection conn = db.JDBCTemplate.getConn();
+			Connection conn = JDBCTemplate.getConn();
 
 			// if(Main.loginMember.getuserId().equals("admin")) {
 
@@ -120,7 +120,7 @@ public class QnaController {
 			pstmt.setString(1, userTitle);
 			pstmt.setString(2, userContents);
 			pstmt.setString(3, category);
-			pstmt.setString(4, Main.LoginMember.getNo()); // pstmt.setString(4, Main.loginMember.getNo()); // 6
+			pstmt.setString(4, Main.loginMember.getNo()); // pstmt.setString(4, Main.loginMember.getNo()); // 6
 			int result = pstmt.executeUpdate();
 
 			// 결과 처리
@@ -136,7 +136,7 @@ public class QnaController {
 	}
 
 	// conn 준비
-//		Connection conn = db.JDBCTemplate.getConn();
+//		Connection conn = JDBCTemplate.getConn();
 //
 //		// if(Main.loginMember.getuserId().equals("admin")) {
 //
@@ -187,7 +187,7 @@ public class QnaController {
 //	private void masterWrite() throws Exception {
 //
 //		// conn 준비
-//		Connection conn = db.JDBCTemplate.getConn();
+//		Connection conn = JDBCTemplate.getConn();
 //
 //		// sql 준비
 //		String sql = "INSERT INTO QNA(NO, MASTER_TITLE, MASTER_CONTENTS,CATEGORY) VALUES(SEQ_QNA_NO.NEXTVAL , ?,? , ?)";
@@ -217,14 +217,14 @@ public class QnaController {
 	// 3문의 내용 수정(유저것만)
 	private void userEditContent() throws Exception {
 
-		if (Main.LoginMember == null) {
+		if (Main.loginMember == null) {
 			System.out.println("로그인 해야만");
 			return;
 		}
 
-		if (Main.LoginMember.getId().equals("admin")) {
+		if (Main.loginMember.getId().equals("admin")) {
 			System.out.println("관리자 전용");
-			Connection conn = db.JDBCTemplate.getConn();
+			Connection conn = JDBCTemplate.getConn();
 
 			// conn
 
@@ -299,7 +299,7 @@ public class QnaController {
 			// 4 문의 내용 수정(관리자것만)
 
 			// conn
-//			Connection conn = db.JDBCTemplate.getConn();
+//			Connection conn = JDBCTemplate.getConn();
 //
 //			System.out.print("수정할 관리자 제목 : ");
 //			String masterTitle = Main.SC.nextLine();
@@ -332,7 +332,7 @@ public class QnaController {
 	private void userDelete() throws Exception {
 		System.out.println("-----문의 삭제-----");
 		// conn
-		Connection conn = db.JDBCTemplate.getConn();
+		Connection conn = JDBCTemplate.getConn();
 
 		System.out.print("삭제할 문의 번호 :");
 		String no = Main.SC.nextLine();
@@ -355,7 +355,7 @@ public class QnaController {
 	private void searchByTitle() throws Exception {
 
 		// conn
-		Connection conn = db.JDBCTemplate.getConn();
+		Connection conn = JDBCTemplate.getConn();
 
 		System.out.print("검색할 제목 : ");
 		String value = Main.SC.nextLine();
@@ -406,7 +406,7 @@ public class QnaController {
 		//if (Main.LoginMember.getId().equals(Main.SC.nextLine())) {
 		//	System.out.println("관리자 전용");
 		// conn
-		Connection conn = db.JDBCTemplate.getConn();
+		Connection conn = JDBCTemplate.getConn();
 
 		System.out.print("전체 조회 할 게시글 번호 : ");
 
@@ -415,7 +415,7 @@ public class QnaController {
 		
 		PreparedStatement pstmt = conn.prepareStatement(sql);
 	//	String num = Main.SC.nextLine();
-		pstmt.setString(1, Main.LoginMember.getNo());
+		pstmt.setString(1, Main.loginMember.getNo());
 		ResultSet rs = pstmt.executeQuery();
 
 		// rs
@@ -454,7 +454,7 @@ public class QnaController {
 	// 8게시글 상세 조회 (번호 이용해서)
 	private void selectQnaTwo() throws Exception {
 		System.out.println("게시물 번호 조회");
-		Connection conn = db.JDBCTemplate.getConn();
+		Connection conn = JDBCTemplate.getConn();
 		String sql = "SELECT * FROM QNA WHERE NO =? ";
 
 		PreparedStatement pstmt = conn.prepareStatement(sql);

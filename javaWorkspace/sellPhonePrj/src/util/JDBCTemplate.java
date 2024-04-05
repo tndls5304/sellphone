@@ -3,7 +3,7 @@ package util;
 import java.sql.Connection;
 import java.sql.DriverManager;
 
-public class Util {
+public class JDBCTemplate {
 	
    public static final Connection getConn() throws Exception {
       Connection conn = null;

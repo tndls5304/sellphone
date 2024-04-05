@@ -6,11 +6,11 @@ import java.sql.ResultSet;
 import java.util.ArrayList;
 
 import battery.BatteryVo;
-import main.MainController;
+import main.Main;
 import member.MemberController;
 import modelClass.ModelClassVo;
 import scratch.ScratchVo;
-import util.Util;
+import util.JDBCTemplate;
 
 public class GradeListController {
 	//메뉴얼
@@ -18,7 +18,7 @@ public class GradeListController {
 		
 		System.out.println("1. 가격 산정표 조회");
 		System.out.println("2. 등급 산정표 조회");
-		String inputNum = MainController.SC.nextLine();
+		String inputNum = Main.SC.nextLine();
 		switch (inputNum) {
 		case "1":
 			priceSet();
@@ -36,13 +36,13 @@ public class GradeListController {
 	private void gradeSet() throws Exception {
 		System.out.println("1. 등급 기준");
 		System.out.println("2. 차감 기준");
-		String inputNum1 = MainController.SC.nextLine();
+		String inputNum1 = Main.SC.nextLine();
 		if (inputNum1.equals("1")) {
 			modelClass();
 		} else if (inputNum1.equals("2")) {
 			System.out.println("1. 배터리 성능");
 			System.out.println("2. 스크래치 개수");
-			String inputNum2 = MainController.SC.nextLine();
+			String inputNum2 = Main.SC.nextLine();
 			if (inputNum2.equals("1")) {
 				battery();
 			} else if (inputNum2.equals("2")) {
@@ -54,7 +54,7 @@ public class GradeListController {
 	// 차감기준 - 스크래치
 	private void scratch() throws Exception {
 		//커넥션 가져오기
-		Connection conn = Util.getConn();
+		Connection conn = JDBCTemplate.getConn();
 		
 		//SQL
 		String sql = "SELECT NO, NUM, SCORE, TO_CHAR(ENROLL_DATE, 'YYYY.MM.DD') ENROLL_DATE FROM SCRATCH";
@@ -91,7 +91,7 @@ public class GradeListController {
 	//차감 기준 - 배터리
 	private void battery() throws Exception {
 		// 커넥션 가져오기
-		Connection conn = Util.getConn();
+		Connection conn = JDBCTemplate.getConn();
 		//SQL
 		String sql = "SELECT PERCENTAGE, SCORE, TO_CHAR(ENROLL_DATE, 'YYYY.MM.DD') ENROLL_DATE FROM BATTERY";
 		PreparedStatement pstmt = conn.prepareStatement(sql);
@@ -124,7 +124,7 @@ public class GradeListController {
 	
 	//등급 산정표 조회 - 등급기준
 	private void modelClass() throws Exception {
-		Connection conn = Util.getConn();
+		Connection conn = JDBCTemplate.getConn();
 		String sql = "SELECT NO, GRADE, TOTAL_SCORE, TO_CHAR(ENROLL_DATE, 'YYYY.MM.DD') ENROLL_DATE FROM MODEL_CLASS";
 		PreparedStatement pstmt = conn.prepareStatement(sql);
 		ResultSet rs = pstmt.executeQuery();
@@ -159,16 +159,16 @@ public class GradeListController {
 		System.out.println("기종을 선택해주세요.");
 		System.out.println("1. 아이폰");
 		System.out.println("2. 갤럭시");
-		String inputNum1 = MainController.SC.nextLine();
+		String inputNum1 = Main.SC.nextLine();
 		String inputPhoneName = "";
 		if (inputNum1.equals("1")) {
 			System.out.println("1. 기본 모델");
 			System.out.println("2. 프로 모델");
 			System.out.println("3. Xs");
-			String inputNum2 = MainController.SC.nextLine();
+			String inputNum2 = Main.SC.nextLine();
 			if (inputNum2.equals("1")) {
 				System.out.println("모델의 넘버를 입력해주세요.");
-				String inputNumber1 = MainController.SC.nextLine();
+				String inputNumber1 = Main.SC.nextLine();
 				if (Integer.parseInt(inputNumber1) > 15 || Integer.parseInt(inputNumber1) < 11) {
 					System.out.println("존재하지 않는 기종입니다. 처음부터 다시 진행해주세요.");
 					return;
@@ -177,7 +177,7 @@ public class GradeListController {
 				inputPhoneName += inputNumber1;
 			} else if (inputNum2.equals("2")) {
 				System.out.println("모델의 넘버를 입력해주세요.");
-				String inputNumber2 = MainController.SC.nextLine();
+				String inputNumber2 = Main.SC.nextLine();
 				if (Integer.parseInt(inputNumber2) > 15 || Integer.parseInt(inputNumber2) < 11) {
 					System.out.println("존재하지 않는 기종입니다. 처음부터 다시 진행해주세요.");
 					return;
@@ -189,7 +189,7 @@ public class GradeListController {
 			}
 		} else if (inputNum1.equals("2")) {
 			System.out.println("시리즈의 넘버를 입력해주세요.");
-			String inputNumber3 = MainController.SC.nextLine();
+			String inputNumber3 = Main.SC.nextLine();
 			if (Integer.parseInt(inputNumber3) > 24 || Integer.parseInt(inputNumber3) < 21) {
 				System.out.println("존재하지 않는 기능입니다. 처음부터 다시 진행해주세요.");
 				return;
@@ -198,7 +198,7 @@ public class GradeListController {
 			inputPhoneName += inputNumber3;
 		}
 		// 커넥션 가져오기
-		Connection conn = Util.getConn();
+		Connection conn = JDBCTemplate.getConn();
 		// SQL
 		String sql = "SELECT NO , MODEL_NAME , GRADE , FIRST_PRICE , GRADE_PRICE , PERCENTAGE , TO_CHAR(ENROLL_DATE, 'YYYY.MM.DD HH24:MI') ENROLL_DATE FROM PRICE_SET WHERE MODEL_NAME = ?";
 		PreparedStatement pstmt = conn.prepareStatement(sql);

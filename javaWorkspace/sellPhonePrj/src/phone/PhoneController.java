@@ -5,14 +5,14 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.util.ArrayList;
 
-import main.MainController;
-import util.Util;
+import main.Main;
+import util.JDBCTemplate;
 
 public class PhoneController {
 	// 중고폰 가격 정보 전체 조회
 	public void phoneInfo() throws Exception {
 		// 커넥션 가져오기
-		Connection conn = Util.getConn();
+		Connection conn = JDBCTemplate.getConn();
 		// SQL
 		String sql = "SELECT NO, MODEL_NAME, GRADE, GRADE_PRICE FROM PHONE";
 		PreparedStatement pstmt = conn.prepareStatement(sql);
@@ -55,10 +55,10 @@ public class PhoneController {
 
 	public void phoneDetailInfo() throws Exception {
 		// 커넥션 가져오기
-		Connection conn = Util.getConn();
+		Connection conn = JDBCTemplate.getConn();
 		// 값 입력받기
 		System.out.println("조회하실 기종을 입력하세요. ex)아이폰, 갤럭시");
-		String modelName = MainController.SC.nextLine();
+		String modelName = Main.SC.nextLine();
 		if (modelName.contains("프로")) {
 			modelName = "%IPHONE PRO%";
 		} else if (modelName.contains("아이")) {
@@ -72,7 +72,7 @@ public class PhoneController {
 		System.out.println("조회하실 기종의 등급을 입력해주세요");
 
 		// SQL
-		String grade = MainController.SC.nextLine();
+		String grade = Main.SC.nextLine();
 		String sql = "SELECT NO, MODEL_NAME, GRADE, GRADE_PRICE FROM PHONE WHERE MODEL_NAME LIKE ? AND GRADE = ?";
 		PreparedStatement pstmt = conn.prepareStatement(sql);
 		grade = grade.toUpperCase();
