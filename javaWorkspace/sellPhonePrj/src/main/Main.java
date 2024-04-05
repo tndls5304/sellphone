@@ -7,18 +7,22 @@ import member.MemberController;
 import member.MemberVo;
 import phone.PhoneController;
 import purchaseList.PurchaseListController;
-import util.JDBCTemplate;
 
 public class Main {
 	// 스캐너 생성
 	public static final Scanner SC = new Scanner(System.in);
-	public static boolean run = true;
+	public static boolean run4 = true;
 	public static MemberVo loginMember = null;
 	//메뉴얼
 	public void printMenu() throws Exception {
 		MemberController mcl = new MemberController();
+		
+		
 		mcl.printMenu();
 		
+
+	}// 메소드
+	public void printmMenu() throws Exception {
 		if(Main.loginMember ==null) {
 			System.out.println("로그인 후 이용해 주세요.");
 			return;
@@ -29,8 +33,9 @@ public class Main {
 		GradeListController glc = new GradeListController();
 		
 		
-		while (run) {
-			if(Main.loginMember.getId().equals("addmin")) {
+		while (run4) {
+			System.out.println("124123421");
+			if(Main.loginMember.getId().equals("ADDMIN")) {
 				plc.masterMenu();
 			} else {
 				System.out.println(
@@ -67,7 +72,7 @@ public class Main {
 				
 				case "9":
 					System.out.println("시스템 종료.");
-					run = false;
+					run4 = false;
 					break;
 				default:
 					System.out.println("잘못된 입력입니다. 다시 입력해주세요");
@@ -76,9 +81,7 @@ public class Main {
 			}
 			
 		} // 반복문
-
-	}// 메소드
-
+	}
 	public static void main(String[] args) throws Exception {
 		Main m = new Main();
 		m.printMenu();

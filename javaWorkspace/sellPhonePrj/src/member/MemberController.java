@@ -4,62 +4,162 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 
+import announcement.AnnouncementController;
+import faq.FaqController;
+import free_board.Free_board;
 import main.Main;
+import qna.QnaController;
 import util.JDBCTemplate;
 
 public class MemberController {
 	public static boolean run = true;
+	public static boolean run2 = true;
+	public static boolean run3 = true;
+	public static int num = 0;
+
 	public void printMenu() throws Exception {
+		AnnouncementController acr = new AnnouncementController();
+		Free_board fb = new Free_board();
+		FaqController fct = new FaqController();
+		Main main = new Main();
+		QnaController qct = new QnaController();
+		while (run2) {
+			run = true;
+			run3 = true;
+			Main.run4 = true;
+			while (run) {
+				if (num == 0) {
+					System.out.println("----- member -----");
+					System.out.println("1. 회원가입");
+					System.out.println("2. 로그인");
+					System.out.println("3. 공지사항");
+					System.out.println("4. 자유게시판");
+					System.out.println("5. 자주 묻는 질문");
 
-		while (run) {
-			if (Main.loginMember == null) {
-				System.out.println("----- member -----");
-				System.out.println("1. 회원가입");
-				System.out.println("2. 로그인");
-				System.out.println("3. 종료");
-				System.out.println("원하는 메뉴 번호 입력");
-				String num = Main.SC.nextLine();
-				switch (num) {
-				case "1":
-					join();
-					break;
-				case "2":
-					login();
-					break;
-				case "3":
-					System.out.println("종료합니다.");
-					run = false;
-					break;
-				default:
-					System.out.println("잘못된 입력입니다.");
+					System.out.println("9. 종료");
+					System.out.println("원하는 메뉴 번호 입력");
+					String num = Main.SC.nextLine();
+					switch (num) {
+					case "1":
+						join();
+						break;
+					case "2":
+						login();
+						break;
+					case "3":
+						acr.printMenu();
+						break;
+					case "4":
+						fb.printMenu();
+						break;
+					case "5":
+						fct.printMenu();
+						break;
+					case "9":
+						System.out.println("종료합니다.");
+						run = false;
+						break;
+					default:
+						System.out.println("잘못된 입력입니다.");
+					}
+
+				} else if (num != 0) {
+					System.out.println("----- member -----");
+					System.out.println("1. 회원가입");
+					System.out.println("2. 로그인");
+					System.out.println("3. 공지사항");
+					System.out.println("4. 자유게시판");
+					System.out.println("5. 자주 묻는 질문");
+
+					System.out.println("9. 종료");
+					System.out.println("원하는 메뉴 번호 입력");
+					String num = Main.SC.nextLine();
+					switch (num) {
+					case "1":
+						join();
+						break;
+					case "2":
+						login();
+						break;
+					case "3":
+						acr.printMenu();
+						break;
+					case "4":
+						fb.printMenu();
+						break;
+					case "5":
+						fct.printMenu();
+						break;
+					case "9":
+						System.out.println("종료합니다.");
+						run = false;
+						break;
+					default:
+						System.out.println("잘못된 입력입니다.");
+					}
+
 				}
+				while (run3) {
+					System.out.println("1. 멤버");
+					System.out.println("2. 중고폰 판매");
+					System.out.println("3. Qna");
+					System.out.println("4. 관리자 메뉴");
+					System.out.println("0. 이전 메뉴로");
 
-			} else if (Main.loginMember != null) {
-				System.out.println("------------------");
-				System.out.println("1. 로그아웃");
-				System.out.println("2. 회원탈퇴");
-				System.out.println("3. 회원정보 조회");
-				System.out.println("4. 회원정보 변경");
-				System.out.println("------------------");
-				String inputNum = Main.SC.nextLine();
-				switch (inputNum) {
-				case "1":
-					logout();
-					break;
-				case "2":
-					deleteM();
-					break;
-				case "3":
-					mInfo();
-					break;
-				case "4":
-					mUpdateInfo();
-					break;
-				default:
-					System.out.println("잘못된 입력입니다.");
-					break;
+					String input = Main.SC.nextLine();
+					switch (input) {
+					case "1":
+						menu();
+						break;
+					case "2":
+						main.printmMenu();
+						break;
+					case "3":
+						qct.printMenu();
+						break;
+					
+					case "0":
+						run = false;
+						run3 = false;
+						num++;
+						break;
+					default:
+						System.out.println("잘못된 입력입니다.");
+						break;
+					}
 				}
 			}
+		}
+
+	}
+
+	
+
+	private void menu() throws Exception {
+		System.out.println("------------------");
+		System.out.println("1. 로그아웃");
+		System.out.println("2. 회원탈퇴");
+		System.out.println("3. 회원정보 조회");
+		System.out.println("4. 회원정보 변경");
+		System.out.println("------------------");
+		System.out.print("번호 입력 : ");
+		String inputNum = Main.SC.nextLine();
+		switch (inputNum) {
+		case "1":
+			logout();
+			break;
+		case "2":
+			deleteM();
+			break;
+		case "3":
+			mInfo();
+			break;
+		case "4":
+			mUpdateInfo();
+			break;
+		default:
+			System.out.println("잘못된 입력입니다.");
+			break;
 		}
 	}
 
@@ -82,6 +182,7 @@ public class MemberController {
 		int result = pstmt.executeUpdate();
 		if (result != 1) {
 			System.out.println("실패");
+			
 			return;
 		}
 		System.out.println("성공");
@@ -184,7 +285,7 @@ public class MemberController {
 				System.out.println("변경하실 비밀번호를 입력해주세요.");
 				System.out.print("변경할 비밀번호 : ");
 				String inputPwd1 = Main.SC.nextLine();
-				if(!inputPwd1.equals(Main.loginMember.getPwd())) {
+				if (!inputPwd1.equals(Main.loginMember.getPwd())) {
 					System.out.println("한번 더 입력해주세요.");
 					String inputPwd2 = Main.SC.nextLine();
 					if (inputPwd1.equals(inputPwd2)) {
@@ -205,7 +306,7 @@ public class MemberController {
 						System.out.println("비밀번호가 일치하지 않습니다.");
 						return;
 					}
-				} else if(inputPwd1.equals(Main.loginMember.getPwd())) {
+				} else if (inputPwd1.equals(Main.loginMember.getPwd())) {
 					System.out.println("기존의 비밀번호와 동일합니다.");
 					System.out.println("변경하실 비밀번호를 입력해주세요.");
 				} else {

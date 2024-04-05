@@ -6,8 +6,8 @@ import java.sql.ResultSet;
 import java.util.ArrayList;
 import java.util.List;
 
-import main.Main;
 import util.JDBCTemplate;
+import main.Main;
 
 public class QnaController {
 
@@ -44,6 +44,7 @@ public class QnaController {
 		case "6":
 			userDelete();
 			break;
+		
 		default:
 			System.out.println("잘못된 입력입니다.");
 		}
@@ -58,7 +59,7 @@ public class QnaController {
 			return;
 		}
 
-		if (Main.loginMember.getId().equals("admin")) {
+		if (Main.loginMember.getId().equals("ADMIN")) {
 			System.out.println("관리자 전용");
 			Connection conn = JDBCTemplate.getConn();
 
@@ -77,6 +78,7 @@ public class QnaController {
 			pstmt.setString(1, masterTitle);
 			pstmt.setString(2, masterContents);
 			pstmt.setString(3, category);
+			
 			int result = pstmt.executeUpdate();
 
 			// 결과 처리
@@ -130,13 +132,13 @@ public class QnaController {
 			}
 
 			// JDBCTemplate에서 conn.setAutoCommit(false); 라서 커밋
-			conn.commit();
+		
 			System.out.println("문의 작성 성공 !");
 		}
 	}
 
 	// conn 준비
-//		Connection conn = JDBCTemplate.getConn();
+//		Connection conn = db.JDBCTemplate.getConn();
 //
 //		// if(Main.loginMember.getuserId().equals("admin")) {
 //
@@ -187,7 +189,7 @@ public class QnaController {
 //	private void masterWrite() throws Exception {
 //
 //		// conn 준비
-//		Connection conn = JDBCTemplate.getConn();
+//		Connection conn = db.JDBCTemplate.getConn();
 //
 //		// sql 준비
 //		String sql = "INSERT INTO QNA(NO, MASTER_TITLE, MASTER_CONTENTS,CATEGORY) VALUES(SEQ_QNA_NO.NEXTVAL , ?,? , ?)";
@@ -299,7 +301,7 @@ public class QnaController {
 			// 4 문의 내용 수정(관리자것만)
 
 			// conn
-//			Connection conn = JDBCTemplate.getConn();
+//			Connection conn = db.JDBCTemplate.getConn();
 //
 //			System.out.print("수정할 관리자 제목 : ");
 //			String masterTitle = Main.SC.nextLine();
@@ -361,7 +363,7 @@ public class QnaController {
 		String value = Main.SC.nextLine();
 
 		// sql
-		String sql =   "SELECT * FROM BOARD WHERE NO LIKE '%' || ? || '%'";
+		String sql =   "SELECT * FROM QNA WHERE USER_TITLE LIKE '%' || ? || '%'";
 		PreparedStatement pstmt = conn.prepareStatement(sql);
 		pstmt.setString(1, value);
 		ResultSet rs = pstmt.executeQuery();

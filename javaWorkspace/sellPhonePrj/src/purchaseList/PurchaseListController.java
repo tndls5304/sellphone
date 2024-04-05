@@ -245,7 +245,7 @@ public class PurchaseListController {
 			break;
 		case "3":
 			System.out.println("종료..");
-			return Main.run = false;
+			return Main.run4 = false;
 		default:
 			System.out.println("잘못된 입력입니다.");
 			break;

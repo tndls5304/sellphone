@@ -75,7 +75,7 @@ public class Free_board {
       System.out.println("내용 : ");
       String content = Main.SC.nextLine();
 
-      String sql = "INSERT INTO FREE_BOARD(NO,TITLE,CONTENT,WRITER_NO) VALUES(SQ_BOARD_NO.NEXTVAL,?,?,?)";
+      String sql = "INSERT INTO FREE_BOARD(NO,TITLE,CONTENT,WRITER_NO) VALUES(SEQ_FREE_BOARD_NO.NEXTVAL,?,?,?)";
 
       PreparedStatement pstmt = conn.prepareStatement(sql);
       pstmt.setString(1, title);
